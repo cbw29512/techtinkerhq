@@ -25,6 +25,21 @@ class WeeklyReleaseTests(unittest.TestCase):
             for path in ("content/articles.json", "content/publish-queue.json",
                          "archive/legacy-map.json"):
                 shutil.copy2(REPO / path, self.root / path)
+            # Use a synthetic candidate, independent of previous real releases.
+            queue_path = self.root / "content/publish-queue.json"
+            queue = json.loads(queue_path.read_text(encoding="utf-8"))
+            candidate = queue["items"][0]
+            candidate["slug"] = "automation-regression-guide"
+            candidate["id"] = "automation-regression-guide"
+            candidate["status"] = "review_needed"
+            candidate["review"] = {
+                "verified_by": "", "verified_at": "", "sources_checked": False,
+            }
+            candidate["article"]["id"] = "automation-regression-guide"
+            candidate["article"]["slug"] = "automation-regression-guide"
+            candidate["article"]["status"] = "review_needed"
+            queue["items"] = [candidate]
+            queue_path.write_text(json.dumps(queue), encoding="utf-8")
         except Exception:
             LOG.exception("Could not prepare weekly release fixture")
             raise
@@ -76,12 +91,14 @@ class WeeklyReleaseTests(unittest.TestCase):
     def test_approved_content_releases_once(self):
         try:
             self._approve()
+            baseline, _ = read_data(self.root)
+            original_count = len(baseline["articles"])
             dry = release(self.root, apply=False)
             self.assertEqual(dry["changed"], False)
             actual = release(self.root, apply=True)
             self.assertTrue(actual["changed"])
             site, _ = read_data(self.root)
-            self.assertEqual(len(site["articles"]), 4)
+            self.assertEqual(len(site["articles"]), original_count + 1)
             self.assertEqual(site["articles"][-1]["status"], "approved")
             queue = json.loads((self.root / "content/publish-queue.json").read_text())
             self.assertEqual(queue["items"][0]["status"], "published")
