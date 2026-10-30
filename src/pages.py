@@ -10,7 +10,7 @@ LOG = logging.getLogger(__name__)
 def home(articles: list[dict], mode: str) -> str:
     try:
         lead = articles[0]
-        newest = ''.join(card(a) for a in articles)
+        newest = ''.join(card(a) for a in reversed(articles[-6:]))
         body = '''<section class="hero"><div class="container hero-inner">
 <div class="hero-copy"><p class="eyebrow"><span class="pulse-dot"></span> INDEPENDENT TECH EXPLAINERS</p>
 <h1>Better tech decisions.<br><span>Less marketing noise.</span></h1>
@@ -25,13 +25,14 @@ def home(articles: list[dict], mode: str) -> str:
 <div class="visual-step"><span>03</span><div><strong>Compare the trade-offs</strong><small>Choose on evidence, not hype</small></div><em>✓</em></div>
 <div class="visual-footer"><i></i> Quality gate: PASS</div></div></div>
 </div></section>
-<section class="container home-intro"><div><span class="eyebrow">THE LATEST</span><h2>Start with the facts.</h2><p>Three focused guides, rebuilt from the topics of our older WordPress articles and checked against documented specifications.</p></div><a class="secondary-link" href="/guides/">View all guides <span aria-hidden="true">↗</span></a></section>
+<section class="container home-intro"><div><span class="eyebrow">THE LATEST</span><h2>Start with the facts.</h2><p>{len(articles)} source-checked guides, built to explain technical specifications and practical buying decisions.</p></div><a class="secondary-link" href="/guides/">View all guides <span aria-hidden="true">↗</span></a></section>
 <section class="container"><div class="cards-grid">'''+newest+'''</div></section>
 <section class="container value-section"><div class="value-heading"><span class="eyebrow">THE DIFFERENCE</span><h2>Honest guidance beats confident guesses.</h2></div><div class="value-grid">
 <div><span class="value-number">01 /</span><h3>Real specifications</h3><p>We trace technical claims back to manufacturers or project documentation.</p></div>
 <div><span class="value-number">02 /</span><h3>Clear caveats</h3><p>When a model revision or product detail matters, we say so explicitly.</p></div>
 <div><span class="value-number">03 /</span><h3>No pretend testing</h3><p>Source-based explanations are identified as such. Hands-on results require actual testing.</p></div></div></section>
 <section class="container closing-cta"><div><p class="eyebrow">BUY BETTER, NOT FASTER</p><h2>Know what matters before checkout.</h2><p>Read the checklist. Verify the model. Then make the call.</p></div><a class="button button-dark" href="/guides/">Read the guides <span aria-hidden="true">↗</span></a></section>'''
+        body = body.replace('{len(articles)}', str(len(articles)))
         return layout('Tech guides without the guesswork', 'Independent, evidence-based technology buying guides. Clear hardware specifications, networking tips, and keyboard switch explainers.', '/', body, mode)
     except Exception:
         LOG.exception('Homepage generation failed')
@@ -45,8 +46,9 @@ def guide_index(articles: list[dict], mode: str) -> str:
 <div class="listing-header"><span class="eyebrow">THE LIBRARY</span><h1>Tech guides, minus the fluff.</h1><p>Find the specification that matters. Every published guide includes the sources behind its claims.</p></div>
 <div class="filterbar"><div class="search-wrap"><label for="guide-search">Search guides</label><div class="search-box"><span aria-hidden="true">⌕</span><input id="guide-search" type="search" placeholder="Try networking, Proxmox, switches..." autocomplete="off"></div></div>
 <div class="filter-controls" role="group" aria-label="Filter by topic"><button class="filter active" type="button" data-filter="All" aria-pressed="true">All guides</button><button class="filter" type="button" data-filter="Networking" aria-pressed="false">Networking</button><button class="filter" type="button" data-filter="Keyboards" aria-pressed="false">Keyboards</button></div></div>
-<p id="result-count" class="result-count" role="status" aria-live="polite">3 guides</p><div id="guides-grid" class="cards-grid">'''+items+'''</div><p id="empty-state" class="empty-state" hidden>No guides match that search. Try another term or category.</p></div>
+<p id="result-count" class="result-count" role="status" aria-live="polite">{len(articles)} guides</p><div id="guides-grid" class="cards-grid">'''+items+'''</div><p id="empty-state" class="empty-state" hidden>No guides match that search. Try another term or category.</p></div>
 <script src="/assets/filters.js" defer></script>'''
+        body = body.replace('{len(articles)}', str(len(articles)))
         return layout('All technology guides', 'Browse manufacturer-sourced networking, homelab, and keyboard guides. Search by topic and compare technical specifications.', '/guides/', body, mode)
     except Exception:
         LOG.exception('Guide directory generation failed')
