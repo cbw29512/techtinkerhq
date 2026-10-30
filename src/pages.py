@@ -8,25 +8,31 @@ LOG = logging.getLogger(__name__)
 
 
 def home(articles: list[dict], mode: str) -> str:
+    """Render the same approved articles as prominent, first-screen guide cards."""
     try:
-        lead = articles[0]
-        newest = ''.join(card(a) for a in reversed(articles[-6:]))
-        body = '''<section class="hero"><div class="container hero-inner">
-<div class="hero-copy"><p class="eyebrow"><span class="pulse-dot"></span> INDEPENDENT TECH EXPLAINERS</p>
+        # Keep the homepage purely derived from already approved article data.
+        # Draft queue items never reach this renderer; the builder reads articles.json.
+        newest = ''.join(card(item) for item in reversed(articles[-6:]))
+        body = '''<section class="home-top"><div class="container">
+<div class="home-lead">
+<div class="home-lead-copy">
+<p class="eyebrow">INDEPENDENT TECH EXPLAINERS</p>
 <h1>Better tech decisions.<br><span>Less marketing noise.</span></h1>
-<p>Before you buy the hardware, understand what the specs actually mean. Clear explanations, cited sources, and practical buying checklists.</p>
-<div class="hero-actions"><a href="/guides/" class="button button-lime">Explore tech guides <span aria-hidden="true">↗</span></a></div>
-<div class="hero-principles"><span><b aria-hidden="true">✓</b> Checked against documentation</span><span><b aria-hidden="true">✓</b> No invented hands-on tests</span></div>
+<p>Understand what the specs actually mean before spending money. Practical buying checklists, networking explanations, and clear source links.</p>
 </div>
-<div class="hero-visual" aria-label="Our buying approach: identify the real requirement, verify the specifications, and decide with evidence"><div class="visual-header"><span class="visual-dots" aria-hidden="true">● ● ●</span><span>BUYER_DECISION.md</span><span class="visual-status">VERIFIED</span></div>
-<div class="visual-body"><div class="visual-command">$ inspect --before-you-buy</div>
-<div class="visual-step"><span>01</span><div><strong>Identify the requirement</strong><small>What problem needs solving?</small></div><em>✓</em></div>
-<div class="visual-step"><span>02</span><div><strong>Verify the specifications</strong><small>Check the actual model and revision</small></div><em>✓</em></div>
-<div class="visual-step"><span>03</span><div><strong>Compare the trade-offs</strong><small>Choose on evidence, not hype</small></div><em>✓</em></div>
-<div class="visual-footer"><i></i> Quality gate: PASS</div></div></div>
+<div class="home-proof" aria-label="Our editorial standards">
+<span class="home-proof-label">OUR PROMISE</span>
+<strong>Evidence first. Every time.</strong>
+<p>We check published specifications, explain limitations, and never invent hands-on test results.</p>
+</div>
+</div>
+<div class="home-card-heading"><div>
+<p class="eyebrow">THE LATEST</p>
+<h2>Start with the facts.</h2>
+<p>{len(articles)} source-checked guides, ready to browse.</p>
+</div><a class="home-all-link" href="/guides/">View all guides <span aria-hidden="true">↗</span></a></div>
+<div class="cards-grid home-cards">'''+newest+'''</div>
 </div></section>
-<section class="container home-intro"><div><span class="eyebrow">THE LATEST</span><h2>Start with the facts.</h2><p>{len(articles)} source-checked guides, built to explain technical specifications and practical buying decisions.</p></div><a class="secondary-link" href="/guides/">View all guides <span aria-hidden="true">↗</span></a></section>
-<section class="container"><div class="cards-grid">'''+newest+'''</div></section>
 <section class="container value-section"><div class="value-heading"><span class="eyebrow">THE DIFFERENCE</span><h2>Honest guidance beats confident guesses.</h2></div><div class="value-grid">
 <div><span class="value-number">01 /</span><h3>Real specifications</h3><p>We trace technical claims back to manufacturers or project documentation.</p></div>
 <div><span class="value-number">02 /</span><h3>Clear caveats</h3><p>When a model revision or product detail matters, we say so explicitly.</p></div>
@@ -37,7 +43,6 @@ def home(articles: list[dict], mode: str) -> str:
     except Exception:
         LOG.exception('Homepage generation failed')
         raise
-
 
 def guide_index(articles: list[dict], mode: str) -> str:
     try:
