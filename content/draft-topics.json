@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "topics": [
+    {
+      "id": "proxmox-safe-network-changes",
+      "slug": "proxmox-safe-network-configuration-changes",
+      "category": "Networking",
+      "kind": "TECH GUIDE",
+      "focus": "How to reduce lockout risks when changing Proxmox VE networking, without providing unsafe universal commands",
+      "sources": [
+        {
+          "name": "Proxmox VE official network configuration guide",
+          "url": "https://github.com/proxmox/pve-docs/blob/master/pve-network.adoc"
+        }
+      ],
+      "facts": [
+        {"id": "bridge", "text": "Proxmox VE uses Linux bridges for connecting guests to physical networks; bridge interfaces are often named vmbr0 or vmbr1."},
+        {"id": "staging", "text": "The Proxmox VE graphical interface stages networking changes in /etc/network/interfaces.new rather than changing /etc/network/interfaces immediately."},
+        {"id": "apply", "text": "With ifupdown2, the interface can apply staged network changes without restarting the entire host. This is not a guarantee that connectivity stays available."},
+        {"id": "risk", "text": "Incorrect changes to a host's network can make it unreachable. An out-of-band management plan or console access reduces recovery risk."},
+        {"id": "tool-warning", "text": "The Proxmox VE documentation warns against indiscriminate use of traditional ifup and ifdown commands because they may interrupt guest traffic."}
+      ]
+    }
+  ]
+}

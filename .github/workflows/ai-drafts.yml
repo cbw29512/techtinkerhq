@@ -1,0 +1,76 @@
+name: Draft source-grounded TechTinkerer guides
+
+on:
+  schedule:
+    # Tuesday 15:23 UTC; requires explicit opt-in and an API key.
+    - cron: '23 15 * * 2'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: tech-tinkerer-ai-draft
+  cancel-in-progress: false
+
+jobs:
+  draft:
+    # No API calls or charges before the owner explicitly enables this variable.
+    if: vars.ENABLE_AI_DRAFTS == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Select unused curated topic without API calls
+        id: topic
+        shell: bash
+        run: |
+          slug=$(python3 -m scripts.ai_draft --print-slug)
+          if [ -n "$slug" ] && git ls-remote --exit-code origin "refs/heads/bot/draft-$slug" > /dev/null; then
+            echo "An existing proposal branch is already available: $slug"
+            slug=""
+          fi
+          echo "slug=$slug" >> "$GITHUB_OUTPUT"
+      - name: Generate one unapproved article draft
+        if: steps.topic.outputs.slug != ''
+        env:
+          ENABLE_AI_DRAFTS: 'true'
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_DRAFT_MODEL: ${{ vars.OPENAI_DRAFT_MODEL }}
+        run: python3 -m scripts.ai_draft --apply
+      - name: Verify model draft and unchanged public website
+        if: steps.topic.outputs.slug != ''
+        run: |
+          python3 -m unittest discover -s tests -v
+          python3 -m src.builder --mode preview
+          python3 -m src.qa
+          grep -q 'noindex' dist/index.html
+          grep -q 'Disallow: /' dist/robots.txt
+      - name: Save recoverable queue draft
+        if: steps.topic.outputs.slug != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: reviewed-queue-candidate
+          path: content/publish-queue.json
+          retention-days: 14
+      - name: Create review-only pull request
+        if: steps.topic.outputs.slug != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SLUG: ${{ steps.topic.outputs.slug }}
+        shell: bash
+        run: |
+          git switch -c "bot/draft-$SLUG"
+          git add content/publish-queue.json
+          git diff --cached --quiet && exit 0
+          git config user.name 'TechTinkerer Draft Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "draft: research candidate $SLUG (review needed)"
+          git push origin "HEAD:refs/heads/bot/draft-$SLUG"
+          gh pr create --base main --head "bot/draft-$SLUG" \
+            --title "AI draft (needs factual review): $SLUG" \
+            --body "AI-generated draft only. Check every technical claim against the cited official documentation; edit article, complete verification fields, and approve in a separate human-reviewed change. This PR never publishes content or grants approval."
