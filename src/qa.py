@@ -12,11 +12,30 @@ from .builder import ROOT
 LOG = logging.getLogger(__name__)
 
 
+def thumbnail_dimensions(path: Path) -> tuple[int, int]:
+    """Read the lossily encoded WebP image header using only the Python stdlib."""
+    try:
+        with path.open("rb") as handle:
+            header = handle.read(32)
+        if (len(header) < 30 or header[:4] != b"RIFF"
+                or header[8:12] != b"WEBP" or header[12:16] != b"VP8 "):
+            raise ValueError(f"Unsupported thumbnail file/header: {path.name}")
+        width = int.from_bytes(header[26:28], "little") & 0x3fff
+        height = int.from_bytes(header[28:30], "little") & 0x3fff
+        if width == 0 or height == 0:
+            raise ValueError(f"Empty thumbnail dimensions: {path.name}")
+        return width, height
+    except Exception:
+        LOG.exception("Cannot verify visual dimensions for %s", path)
+        raise
+
+
 class PageScan(HTMLParser):
     def __init__(self):
         super().__init__()
         self.tags = []
         self.links = []
+        self.images = []
         self.robots = ''
         self.titles = 0
         self.headings = 0
@@ -31,6 +50,8 @@ class PageScan(HTMLParser):
         if tag == 'meta' and a.get('name') == 'robots': self.robots = a.get('content', '')
         if tag == 'meta' and a.get('name') == 'description': self.descriptions += 1
         if tag == 'link' and a.get('rel') == 'canonical': self.canonicals += 1
+        if tag == 'img' and a.get('src', '').startswith('/assets/thumbnails/'):
+            self.images.append(a['src'])
         if tag in ('a','link','script','img'):
             for key in ('href', 'src'):
                 if a.get(key, '').startswith('/') and not a[key].startswith('//'):
@@ -45,6 +66,7 @@ def validate(root: Path = ROOT) -> list[str]:
         pages = list(dist.rglob('*.html'))
         if len(pages) != len(report['paths']) + 1:
             errors.append(f'Route count mismatch: {len(pages)} files for {len(report["paths"])} public routes')
+        checked_images = set()
         for item in pages:
             content = item.read_text(encoding='utf-8')
             scan = PageScan()
@@ -63,6 +85,20 @@ def validate(root: Path = ROOT) -> list[str]:
                 if decoded == '/': path = dist/'index.html'
                 elif decoded.endswith('/'): path = path/'index.html'
                 if not path.is_file(): errors.append(f'{item}: missing asset {url}')
+            # A 200-pixel thumbnail upscaled to 760 pixels is not release quality.
+            for source in scan.images:
+                clean_source = unquote(urlparse(source).path)
+                if clean_source in checked_images:
+                    continue
+                checked_images.add(clean_source)
+                image_file = dist / clean_source.lstrip('/')
+                if image_file.is_file():
+                    try:
+                        width, height = thumbnail_dimensions(image_file)
+                        if width < 760 or height < 380:
+                            errors.append(f'{item}: low-resolution image {source} ({width}x{height})')
+                    except Exception:
+                        errors.append(f'{item}: invalid or unreadable WebP image {source}')
             if re.search(r'(?i)XXXXXXXX|lorem ipsum|personal hands.on review|demo checkout',content):
                 errors.append(f'{item}: suspicious placeholder/claim')
         redirects = (dist/'_redirects').read_text(encoding='utf-8').splitlines()
