@@ -33,6 +33,14 @@ class SiteContractTests(unittest.TestCase):
         self.assertEqual(output['legacy_redirects'],15)
         self.assertEqual(validate(ROOT), [])
 
+    def test_homepage_has_one_standards_navigation_link(self):
+        # Keep the editorial standard accessible without three repeated homepage CTAs.
+        build(ROOT, 'preview')
+        homepage = (ROOT/'dist'/'index.html').read_text(encoding='utf-8')
+        self.assertEqual(homepage.count('href="/standards/"'), 1)
+        self.assertIn('>How we verify</a>', homepage)
+        self.assertTrue((ROOT/'dist'/'standards'/'index.html').is_file())
+
     def test_preview_content_is_not_indexable(self):
         build(ROOT, 'preview')
         self.assertIn('noindex', (ROOT/'dist'/'index.html').read_text())
