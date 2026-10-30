@@ -15,7 +15,7 @@ def home(articles: list[dict], mode: str) -> str:
 <div class="hero-copy"><p class="eyebrow"><span class="pulse-dot"></span> INDEPENDENT TECH EXPLAINERS</p>
 <h1>Better tech decisions.<br><span>Less marketing noise.</span></h1>
 <p>Before you buy the hardware, understand what the specs actually mean. Clear explanations, cited sources, and practical buying checklists.</p>
-<div class="hero-actions"><a href="/guides/" class="button button-lime">Explore tech guides <span aria-hidden="true">↗</span></a><a href="/standards/" class="text-link">How we verify claims <span aria-hidden="true">→</span></a></div>
+<div class="hero-actions"><a href="/guides/" class="button button-lime">Explore tech guides <span aria-hidden="true">↗</span></a></div>
 <div class="hero-principles"><span><b aria-hidden="true">✓</b> Checked against documentation</span><span><b aria-hidden="true">✓</b> No invented hands-on tests</span></div>
 </div>
 <div class="hero-visual" aria-label="Our buying approach: identify the real requirement, verify the specifications, and decide with evidence"><div class="visual-header"><span class="visual-dots" aria-hidden="true">● ● ●</span><span>BUYER_DECISION.md</span><span class="visual-status">VERIFIED</span></div>
