@@ -1,5 +1,7 @@
 """Unit tests of validation contracts and production fail-closed behavior."""
 import json
+import logging
+import tomllib
 import os
 import tempfile
 import unittest
@@ -13,6 +15,23 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class SiteContractTests(unittest.TestCase):
+    def test_netlify_production_context_is_isolated_from_previews(self):
+        """Avoid accidentally indexing draft previews or deploying noindex production."""
+        try:
+            config = tomllib.loads((ROOT / 'netlify.toml').read_text(encoding='utf-8'))
+            preview = config['build']['command']
+            production = config['context']['production']['command']
+            self.assertIn('--mode preview', preview)
+            self.assertNotIn('RELEASE_APPROVED=true', preview)
+            self.assertIn('RELEASE_APPROVED=true', production)
+            self.assertIn('--mode production', production)
+            self.assertIn('python3 -m src.qa', production)
+            self.assertIn("grep -q 'index,follow' dist/index.html", production)
+            self.assertIn("! grep -q 'noindex' dist/index.html", production)
+        except Exception:
+            logging.getLogger(__name__).exception('Netlify context production contract invalid')
+            raise
+
     def test_source_schema_has_three_approved_guides(self):
         data, archive = read_data(ROOT)
         self.assertGreaterEqual(len(data['articles']), 3)

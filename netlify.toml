@@ -5,3 +5,9 @@
 
 [build.environment]
   PYTHON_VERSION = "3.12"
+
+# Deploy previews and branch deployments inherit the noindex staging build.
+# This override is restricted to Netlify's actual production context.
+# The production generator retains its explicit RELEASE_APPROVED gate.
+[context.production]
+  command = "python3 -m unittest discover -s tests -v && RELEASE_APPROVED=true python3 -m src.builder --mode production && python3 -m src.qa && grep -q 'Allow: /' dist/robots.txt && grep -q 'index,follow' dist/index.html && ! grep -q 'noindex' dist/index.html"
