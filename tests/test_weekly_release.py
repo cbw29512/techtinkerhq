@@ -38,6 +38,19 @@ class WeeklyReleaseTests(unittest.TestCase):
             candidate["article"]["id"] = "automation-regression-guide"
             candidate["article"]["slug"] = "automation-regression-guide"
             candidate["article"]["status"] = "review_needed"
+            candidate["article"]["visual"] = {
+                "src": "/assets/thumbnails/automation-regression-guide.webp",
+                "alt": "Conceptual illustration of a sample network setup used for publication gate testing",
+                "kind": "illustration",
+            }
+            # The production publisher requires a committed image asset, not
+            # merely an image URL. Copy one real test image into the fixture.
+            visual_dir = self.root / "assets" / "thumbnails"
+            visual_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(
+                REPO / "assets" / "thumbnails" / "10gbe-homelab-switch-checklist.webp",
+                visual_dir / "automation-regression-guide.webp",
+            )
             queue["items"] = [candidate]
             queue_path.write_text(json.dumps(queue), encoding="utf-8")
         except Exception:
@@ -61,6 +74,7 @@ class WeeklyReleaseTests(unittest.TestCase):
                 "verified_by": "human-editor",
                 "verified_at": "2026-10-30",
                 "sources_checked": True,
+                "visual_reviewed": True,
             }
             path.write_text(json.dumps(data), encoding="utf-8")
         except Exception:

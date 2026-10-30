@@ -15,15 +15,65 @@
       "description": "A practical checklist for choosing ports, cabling, and network features before connecting Proxmox hosts or a NAS.",
       "dek": "A faster switch is only useful when the rest of the network can use it. Here is what to verify before spending money.",
       "sections": [
-        {"heading":"Start with the network you actually have", "paragraphs":["Write down the physical NIC speed and connector type on each Proxmox host, NAS, and workstation. A 10GbE-capable switch does not make a 1GbE-only device operate at 10GbE.","Separate internet access from local traffic. A faster switch can improve local transfers even if your internet plan is slower, but a switch alone cannot increase an internet connection's provisioned speed."], "bullets":["Count the devices that need 10GbE now and leave room for future expansion.","Identify each port type before buying: SFP+ and RJ45 Ethernet are not interchangeable without compatible equipment.","Confirm module, transceiver, and cable compatibility using the switch and adapter documentation."]},
-        {"heading":"Decide what needs managing", "paragraphs":["For a small home lab, an unmanaged switch may be enough for a single flat network. For separated lab, guest, or management traffic, check whether the switch supports the VLAN configuration you intend to use.","Proxmox VE uses Linux networking and commonly connects guests to the outside network using Linux bridge interfaces such as vmbr0. The host and switch configuration must agree when VLANs are involved."], "bullets":["VLAN support and manageable configuration, if separation matters.","Enough port capacity at the speed you actually need.","Published specifications for power draw, cooling, and fan noise.","A documented firmware-update path and support policy."]},
-        {"heading":"Do not confuse Gigabit with 10GbE", "paragraphs":["The TP-Link TL-SG108PE is an example of a product that is easy to misclassify: TP-Link's current version-specific page lists eight 10/100/1000 Mbps RJ45 ports and four PoE+ ports, not a 10GbE uplink.","A model name that sounds similar to another product is not proof that its ports have the same speed or capability. Check the exact hardware revision on the manufacturer's page."], "bullets":["Read the manufacturer's full port-speed table.","Check whether the claimed PoE budget is total or per-port.","Avoid purchase links until the model and specifications match the article."]},
-        {"heading":"The decision rule", "paragraphs":["If you cannot name the NICs, port types, cable path, and reason for 10GbE, hold the purchase. First determine the bottleneck. Choose the switch only after those constraints are known."]}
+        {
+          "heading": "Start with the network you actually have",
+          "paragraphs": [
+            "Write down the physical NIC speed and connector type on each Proxmox host, NAS, and workstation. A 10GbE-capable switch does not make a 1GbE-only device operate at 10GbE.",
+            "Separate internet access from local traffic. A faster switch can improve local transfers even if your internet plan is slower, but a switch alone cannot increase an internet connection's provisioned speed."
+          ],
+          "bullets": [
+            "Count the devices that need 10GbE now and leave room for future expansion.",
+            "Identify each port type before buying: SFP+ and RJ45 Ethernet are not interchangeable without compatible equipment.",
+            "Confirm module, transceiver, and cable compatibility using the switch and adapter documentation."
+          ]
+        },
+        {
+          "heading": "Decide what needs managing",
+          "paragraphs": [
+            "For a small home lab, an unmanaged switch may be enough for a single flat network. For separated lab, guest, or management traffic, check whether the switch supports the VLAN configuration you intend to use.",
+            "Proxmox VE uses Linux networking and commonly connects guests to the outside network using Linux bridge interfaces such as vmbr0. The host and switch configuration must agree when VLANs are involved."
+          ],
+          "bullets": [
+            "VLAN support and manageable configuration, if separation matters.",
+            "Enough port capacity at the speed you actually need.",
+            "Published specifications for power draw, cooling, and fan noise.",
+            "A documented firmware-update path and support policy."
+          ]
+        },
+        {
+          "heading": "Do not confuse Gigabit with 10GbE",
+          "paragraphs": [
+            "The TP-Link TL-SG108PE is an example of a product that is easy to misclassify: TP-Link's current version-specific page lists eight 10/100/1000 Mbps RJ45 ports and four PoE+ ports, not a 10GbE uplink.",
+            "A model name that sounds similar to another product is not proof that its ports have the same speed or capability. Check the exact hardware revision on the manufacturer's page."
+          ],
+          "bullets": [
+            "Read the manufacturer's full port-speed table.",
+            "Check whether the claimed PoE budget is total or per-port.",
+            "Avoid purchase links until the model and specifications match the article."
+          ]
+        },
+        {
+          "heading": "The decision rule",
+          "paragraphs": [
+            "If you cannot name the NICs, port types, cable path, and reason for 10GbE, hold the purchase. First determine the bottleneck. Choose the switch only after those constraints are known."
+          ]
+        }
       ],
       "sources": [
-        {"name":"Proxmox VE — Network Configuration (project documentation)","url":"https://github.com/proxmox/pve-docs/blob/master/pve-network.adoc"},
-        {"name":"TP-Link — TL-SG108PE version-specific technical specification","url":"https://www.tp-link.com/us/business-networking/poe-switch/tl-sg108pe/"}
-      ]
+        {
+          "name": "Proxmox VE — Network Configuration (project documentation)",
+          "url": "https://github.com/proxmox/pve-docs/blob/master/pve-network.adoc"
+        },
+        {
+          "name": "TP-Link — TL-SG108PE version-specific technical specification",
+          "url": "https://www.tp-link.com/us/business-networking/poe-switch/tl-sg108pe/"
+        }
+      ],
+      "visual": {
+        "src": "/assets/thumbnails/10gbe-homelab-switch-checklist.webp",
+        "alt": "Conceptual illustration of a homelab networking setup with switch, NAS, Ethernet cabling and planning notes",
+        "kind": "illustration"
+      }
     },
     {
       "id": "tp-link-spec-check",
@@ -37,14 +87,48 @@
       "description": "Clarifying the TL-SG108PE switch's Gigabit Ethernet ports, PoE+ features, and hardware-version differences.",
       "dek": "A previous article confused this model with a 10GbE switch. Here are the manufacturer-backed facts.",
       "sections": [
-        {"heading":"The important correction", "paragraphs":["The TL-SG108PE is an eight-port Gigabit Easy Smart switch. TP-Link lists eight 10/100/1000 Mbps RJ45 ports. It is not an eight-port 10GbE switch, and the listed ports do not include an SFP+ uplink.","The current TL-SG108PE V5 specification describes four 802.3af/at PoE+ ports (ports 1–4), with a total 64W PoE budget. A per-port 30W capability is not a promise that four ports can each deliver 30W simultaneously."]},
-        {"heading":"Hardware revisions matter", "paragraphs":["Do not apply V5 specifications blindly to every TL-SG108PE in circulation. TP-Link's V1 documentation describes four PoE ports with a 55W total budget and different power standards. Check the hardware version printed on the actual unit before relying on a number.","The switch offers web-based management and VLAN-related features, but it should not be advertised as having a 10GbE connection or full enterprise switch functions without verification."], "bullets":["Eight RJ45 ports running up to 1Gbps each on the model page.","Four PoE-capable ports; total budget depends on hardware version.","Web-management and VLAN features; consult the version-specific manual for limits."]},
-        {"heading":"Who should consider it", "paragraphs":["This class of switch may be relevant for a small Gigabit network where a few compatible devices need PoE. It is not an appropriate choice when your requirement is a 10GbE connection between Proxmox hosts or to high-speed storage.","This page is a technical specification explanation, not a hands-on review or a recommendation to purchase at a particular price."]}
+        {
+          "heading": "The important correction",
+          "paragraphs": [
+            "The TL-SG108PE is an eight-port Gigabit Easy Smart switch. TP-Link lists eight 10/100/1000 Mbps RJ45 ports. It is not an eight-port 10GbE switch, and the listed ports do not include an SFP+ uplink.",
+            "The current TL-SG108PE V5 specification describes four 802.3af/at PoE+ ports (ports 1–4), with a total 64W PoE budget. A per-port 30W capability is not a promise that four ports can each deliver 30W simultaneously."
+          ]
+        },
+        {
+          "heading": "Hardware revisions matter",
+          "paragraphs": [
+            "Do not apply V5 specifications blindly to every TL-SG108PE in circulation. TP-Link's V1 documentation describes four PoE ports with a 55W total budget and different power standards. Check the hardware version printed on the actual unit before relying on a number.",
+            "The switch offers web-based management and VLAN-related features, but it should not be advertised as having a 10GbE connection or full enterprise switch functions without verification."
+          ],
+          "bullets": [
+            "Eight RJ45 ports running up to 1Gbps each on the model page.",
+            "Four PoE-capable ports; total budget depends on hardware version.",
+            "Web-management and VLAN features; consult the version-specific manual for limits."
+          ]
+        },
+        {
+          "heading": "Who should consider it",
+          "paragraphs": [
+            "This class of switch may be relevant for a small Gigabit network where a few compatible devices need PoE. It is not an appropriate choice when your requirement is a 10GbE connection between Proxmox hosts or to high-speed storage.",
+            "This page is a technical specification explanation, not a hands-on review or a recommendation to purchase at a particular price."
+          ]
+        }
       ],
       "sources": [
-        {"name":"TP-Link — TL-SG108PE V5 (current model page)","url":"https://www.tp-link.com/us/business-networking/poe-switch/tl-sg108pe/"},
-        {"name":"TP-Link — TL-SG108PE V1 (older hardware revision)","url":"https://www.tp-link.com/us/home-networking/8-port-switch/tl-sg108pe/v1/"}
-      ]
+        {
+          "name": "TP-Link — TL-SG108PE V5 (current model page)",
+          "url": "https://www.tp-link.com/us/business-networking/poe-switch/tl-sg108pe/"
+        },
+        {
+          "name": "TP-Link — TL-SG108PE V1 (older hardware revision)",
+          "url": "https://www.tp-link.com/us/home-networking/8-port-switch/tl-sg108pe/v1/"
+        }
+      ],
+      "visual": {
+        "src": "/assets/thumbnails/tp-link-tl-sg108pe.webp",
+        "alt": "Conceptual illustration of an eight-port gigabit Ethernet switch with four ports highlighted for PoE",
+        "kind": "illustration"
+      }
     },
     {
       "id": "gateron-linear-comparison",
@@ -58,15 +142,55 @@
       "description": "Manufacturer-sourced comparison of two Gateron mechanical keyboard switches, correcting the tactile-switch misconception.",
       "dek": "An older article incorrectly described Ink Black V2 as tactile and clicky. Gateron identifies both switches as linear.",
       "sections": [
-        {"heading":"Neither switch has a tactile bump by design", "paragraphs":["Gateron's published specifications identify Oil King and Ink Black V2 as linear switches. They should not be marketed as tactile switches. That one distinction changes the purchase decision for someone who wants a tactile bump."], "bullets":["Oil King: manufacturer lists a linear feel and 55±5 gf operating force.","Ink Black V2: manufacturer lists a linear feel and 60±15 gf operating force.","Both have a listed nominal pre-travel of about 2.0 mm with stated manufacturer tolerances; check individual variants for current specs."]},
-        {"heading":"Feel is not the same as a spec sheet", "paragraphs":["Operating-force figures are published ranges, not guarantees of how a switch will feel in your keyboard. Plate, keycaps, lubrication, typing technique, and the keyboard's case can alter sound and perceived feel.","Gateron lists Oil King as factory pre-lubed. Claims about every Ink Black V2 package being pre-lubed vary across seller pages, so verify the exact SKU instead of assuming it." ]},
-        {"heading":"Before you buy", "bullets":["Check whether your keyboard supports the switch's pin layout and MX-compatible mount.","Check the operating force and full-travel specifications for the exact seller SKU.","Choose tactile or clicky switches only if you specifically want the bump or audible click; these two models are linear.","Treat first-hand experience claims with skepticism unless the reviewer states what they personally tested." ]},
-        {"heading":"Editorial note", "paragraphs":["This comparison is based on published specifications, not an original hands-on test. No purchase link is offered until the product identity and destination can be verified." ]}
+        {
+          "heading": "Neither switch has a tactile bump by design",
+          "paragraphs": [
+            "Gateron's published specifications identify Oil King and Ink Black V2 as linear switches. They should not be marketed as tactile switches. That one distinction changes the purchase decision for someone who wants a tactile bump."
+          ],
+          "bullets": [
+            "Oil King: manufacturer lists a linear feel and 55±5 gf operating force.",
+            "Ink Black V2: manufacturer lists a linear feel and 60±15 gf operating force.",
+            "Both have a listed nominal pre-travel of about 2.0 mm with stated manufacturer tolerances; check individual variants for current specs."
+          ]
+        },
+        {
+          "heading": "Feel is not the same as a spec sheet",
+          "paragraphs": [
+            "Operating-force figures are published ranges, not guarantees of how a switch will feel in your keyboard. Plate, keycaps, lubrication, typing technique, and the keyboard's case can alter sound and perceived feel.",
+            "Gateron lists Oil King as factory pre-lubed. Claims about every Ink Black V2 package being pre-lubed vary across seller pages, so verify the exact SKU instead of assuming it."
+          ]
+        },
+        {
+          "heading": "Before you buy",
+          "bullets": [
+            "Check whether your keyboard supports the switch's pin layout and MX-compatible mount.",
+            "Check the operating force and full-travel specifications for the exact seller SKU.",
+            "Choose tactile or clicky switches only if you specifically want the bump or audible click; these two models are linear.",
+            "Treat first-hand experience claims with skepticism unless the reviewer states what they personally tested."
+          ]
+        },
+        {
+          "heading": "Editorial note",
+          "paragraphs": [
+            "This comparison is based on published specifications, not an original hands-on test. No purchase link is offered until the product identity and destination can be verified."
+          ]
+        }
       ],
       "sources": [
-        {"name":"Gateron — Oil King Linear Switch Set","url":"https://www.gateron.co/collections/gateron-switches/products/gateron-oil-king-switch-set"},
-        {"name":"Gateron — Ink V2 Switch Set","url":"https://www.gateron.com/products/gateron-ink-v2-switch-features"}
-      ]
+        {
+          "name": "Gateron — Oil King Linear Switch Set",
+          "url": "https://www.gateron.co/collections/gateron-switches/products/gateron-oil-king-switch-set"
+        },
+        {
+          "name": "Gateron — Ink V2 Switch Set",
+          "url": "https://www.gateron.com/products/gateron-ink-v2-switch-features"
+        }
+      ],
+      "visual": {
+        "src": "/assets/thumbnails/gateron-oil-king-vs-ink-black-v2.webp",
+        "alt": "Conceptual illustration comparing a golden mechanical keyboard switch with a black mechanical keyboard switch",
+        "kind": "illustration"
+      }
     }
   ]
 }

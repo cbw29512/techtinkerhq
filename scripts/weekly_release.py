@@ -73,8 +73,17 @@ def release(root: Path = ROOT, apply: bool = False) -> dict:
                 if (not isinstance(review.get("verified_by"), str)
                     or not review["verified_by"].strip()
                     or not DATE.fullmatch(review.get("verified_at", ""))
-                    or review.get("sources_checked") is not True):
+                    or review.get("sources_checked") is not True
+                    or review.get("visual_reviewed") is not True):
                     raise ValueError(f"Missing human verification for: {slug}")
+                # Image review must be accompanied by a real, committed asset.
+                visual = article.get("visual", {})
+                src = visual.get("src", "") if isinstance(visual, dict) else ""
+                if not src.startswith("/assets/thumbnails/"):
+                    raise ValueError(f"Missing approved illustration for: {slug}")
+                image_file = root / src.lstrip("/")
+                if not image_file.is_file() or image_file.stat().st_size < 1024:
+                    raise ValueError(f"Missing physical reviewed image for: {slug}")
                 candidates.append(item)
 
         if not candidates:

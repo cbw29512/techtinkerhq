@@ -52,6 +52,27 @@ class SiteContractTests(unittest.TestCase):
         self.assertEqual(output['legacy_redirects'],15)
         self.assertEqual(validate(ROOT), [])
 
+    def test_homepage_displays_approved_cards_before_secondary_sections(self):
+        """Keep the browsable guide cards prominent without changing review state."""
+        try:
+            # The fixture reads the real approved article list, never the draft queue.
+            articles, _ = read_data(ROOT)
+            build(ROOT, 'preview')
+            homepage = (ROOT / 'dist' / 'index.html').read_text(encoding='utf-8')
+            self.assertIn('class="cards-grid home-cards"', homepage)
+            self.assertLess(
+                homepage.index('class="cards-grid home-cards"'),
+                homepage.index('class="container value-section"'),
+            )
+            self.assertNotIn('class="hero-visual"', homepage)
+            for item in articles['articles']:
+                self.assertIn('/guides/' + item['slug'] + '/', homepage)
+            # Draft previews must stay blocked from indexing despite the redesign.
+            self.assertIn('noindex,nofollow', homepage)
+        except Exception:
+            logging.getLogger(__name__).exception('Card-first homepage regression failed')
+            raise
+
     def test_homepage_has_one_standards_navigation_link(self):
         # Keep the editorial standard accessible without three repeated homepage CTAs.
         build(ROOT, 'preview')

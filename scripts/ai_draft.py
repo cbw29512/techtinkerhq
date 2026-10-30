@@ -37,7 +37,7 @@ def generate(root: Path = ROOT, model_call=request_draft, apply: bool = False) -
         item = {
             "id": topic["id"], "slug": topic["slug"],
             "status": "review_needed",
-            "review": {"verified_by": "", "verified_at": "", "sources_checked": False},
+            "review": {"verified_by": "", "verified_at": "", "sources_checked": False, "visual_reviewed": False},
             "draft_evidence": {"facts": topic["facts"], "source_links": topic["sources"]},
             "article": article,
         }
@@ -48,7 +48,14 @@ def generate(root: Path = ROOT, model_call=request_draft, apply: bool = False) -
         if topic["slug"] in known or len(queued) != len(set(queued)):
             raise ValueError("Draft already published or queued")
         # Test candidate as though reviewed, without changing its actual review_needed state.
-        copy = {**article, "status": "approved"}
+        # Temporary validation-only visual: never attach fake artwork to the
+        # review queue. The human reviewer must provide the real asset later.
+        validation_visual = {
+            "src": "/assets/thumbnails/" + article["slug"] + ".webp",
+            "alt": "Proposed conceptual illustration for the guide titled " + article["title"],
+            "kind": "illustration",
+        }
+        copy = {**article, "status": "approved", "visual": validation_visual}
         with TemporaryDirectory(prefix="tthq-ai-validate-") as temp:
             path = Path(temp)
             (path / "content").mkdir()
