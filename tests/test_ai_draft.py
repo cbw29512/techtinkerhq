@@ -54,7 +54,8 @@ class AIDraftingContractTests(unittest.TestCase):
             # Isolate the test topic so real AI draft merges cannot exhaust the fixture.
             topic_path = self.root / "content/draft-topics.json"
             topics = json.loads(topic_path.read_text(encoding="utf-8"))
-            topics["topics"] = topics["topics"][:1]\n            topics["topics"][0]["id"] = "synthetic-ai-draft-fixture"
+            topics["topics"] = topics["topics"][:1]
+            topics["topics"][0]["id"] = "synthetic-ai-draft-fixture"
             topics["topics"][0]["slug"] = "synthetic-ai-draft-fixture"
             topic_path.write_text(json.dumps(topics), encoding="utf-8")
         except Exception:
