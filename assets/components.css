@@ -5,7 +5,7 @@
 .card-art img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
 .image-type{position:absolute;bottom:12px;left:13px;padding:5px 9px;background:rgba(11,23,39,.82);color:#fff;border:1px solid rgba(255,255,255,.33);border-radius:6px;font-size:11px;font-weight:750;line-height:1.2;letter-spacing:.01em}
 .card-content{padding:25px;display:flex;flex:1;flex-direction:column}.card-top{display:flex;align-items:center;gap:12px;justify-content:space-between;font-size:12px;color:#6b7b86;font-weight:700}
-.category{display:inline-flex;font-weight:800;color:#216f53;background:#e5f7e8;border-radius:5px;padding:4px 9px}.card-content h3{font-size:23px;margin:19px 0 12px;line-height:1.24}.card-content h3 a{text-decoration:none}.card-content h3 a:hover{text-decoration:underline;text-underline-offset:4px}
+.category{display:inline-flex;font-weight:800;color:#216f53;background:#e5f7e8;border-radius:5px;padding:4px 9px}.card-content h3{font-size:23px;margin:19px 0 12px;line-height:1.24}.card-content h3{color:#0b1727}.card-content h3 a{color:#0b1727;text-decoration:none}.card-content h3 a:hover{text-decoration:underline;text-underline-offset:4px}
 .card-content p{font-size:14px;line-height:1.65;margin-bottom:22px}.card-link{color:#1b6551;font-size:14px;font-weight:820;margin-top:auto}.card-link span{padding-left:12px}
 @media(max-width:950px){.cards-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.cards-grid{grid-template-columns:1fr}.card-art{height:165px}}

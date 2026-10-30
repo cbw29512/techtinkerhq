@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import shutil
 import tempfile
 import unittest
@@ -10,6 +11,7 @@ from pathlib import Path
 
 from src.builder import build
 from src.schema import read_data
+from src.qa import thumbnail_dimensions
 
 LOG = logging.getLogger(__name__)
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,7 +26,10 @@ class ArticleVisualTests(unittest.TestCase):
             for visual in images:
                 binary = ROOT / visual['src'].lstrip('/')
                 self.assertTrue(binary.is_file(), binary)
-                self.assertGreater(binary.stat().st_size, 1024)
+                self.assertGreater(binary.stat().st_size, 50000)
+                width, height = thumbnail_dimensions(binary)
+                self.assertGreaterEqual(width, 1000)
+                self.assertGreaterEqual(height, 500)
                 self.assertGreaterEqual(len(visual['alt']), 40)
             build(ROOT, mode='preview')
             html = (ROOT / 'dist' / 'index.html').read_text(encoding='utf-8')
@@ -36,6 +41,18 @@ class ArticleVisualTests(unittest.TestCase):
             self.assertNotIn('class="keycap"', html)
         except Exception:
             LOG.exception('An article lacks a working unique illustration')
+            raise
+
+    def test_stylesheet_fingerprints_and_readable_card_titles(self):
+        try:
+            build(ROOT, mode='preview')
+            html = (ROOT / 'dist' / 'index.html').read_text(encoding='utf-8')
+            for css in ('base.css', 'layout.css', 'components.css', 'pages.css'):
+                self.assertRegex(html, r'/assets/' + re.escape(css) + r'\?v=[a-f0-9]{12}')
+            components = (ROOT / 'assets' / 'components.css').read_text(encoding='utf-8')
+            self.assertIn('.card-content h3 a{color:#0b1727', components)
+        except Exception:
+            LOG.exception('Stylesheet cache-busting or accessible card headings failed')
             raise
 
     def test_missing_visual_is_blocked_before_publication(self):

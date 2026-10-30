@@ -19,6 +19,7 @@ The picture is a first-class part of the article, not decorative filler. A guide
 - `kind`: `illustration` or `verified-photo`.
 - The path cannot be shared between different articles.
 - The actual image file must be present in the repo and survive site QA.
+- CI rejects referenced website thumbnail files smaller than 1000×500 pixels; reviewers must additionally detect blurry upscaled or overcompressed images by sight.
 - AI-generated conceptual illustrations are labeled **Concept illustration** on cards and identified on the guide itself; they are **not** actual product photographs.
 - Never add fabricated brand marks, impossible port counts, misleading product specifications, fake benchmark screenshots, or an unverified photo claiming to be an exact hardware model.
 
@@ -33,7 +34,8 @@ The weekly publisher refuses approved entries that lack `review.visual_reviewed=
 ## Preferred image format
 
 - Compose for the site's 2:1 card ratio; use a genuinely relevant subject for each article.
-- Target 760×380 pixels or greater **from the source** when available; optimize final WebP/AVIF size without misleading upscaling claims.
+- The **original source** must be at least 1000×500 pixels; target 1200×600 or better for the 2:1 cards. Never create a 1200px output by enlarging a 200px thumbnail.
+- Use full-resolution original assets and optimize final WebP quality/size without misleading upscaling claims. Verify the source dimensions **before** conversion.
 - Keep useful details near the center for mobile crops.
 - Use accessible contrast, no baked-in critical text, and avoid watermarks.
 - Never load imagery from expiring CDN links in production. Commit permanent website assets.

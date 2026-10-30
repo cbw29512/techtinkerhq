@@ -70,7 +70,7 @@
         }
       ],
       "visual": {
-        "src": "/assets/thumbnails/10gbe-homelab-switch-checklist.webp",
+        "src": "/assets/thumbnails/10gbe-homelab-switch-checklist-sharp.webp",
         "alt": "Conceptual illustration of a homelab networking setup with switch, NAS, Ethernet cabling and planning notes",
         "kind": "illustration"
       }
@@ -125,7 +125,7 @@
         }
       ],
       "visual": {
-        "src": "/assets/thumbnails/tp-link-tl-sg108pe.webp",
+        "src": "/assets/thumbnails/tp-link-tl-sg108pe-sharp.webp",
         "alt": "Conceptual illustration of an eight-port gigabit Ethernet switch with four ports highlighted for PoE",
         "kind": "illustration"
       }
@@ -187,7 +187,7 @@
         }
       ],
       "visual": {
-        "src": "/assets/thumbnails/gateron-oil-king-vs-ink-black-v2.webp",
+        "src": "/assets/thumbnails/gateron-oil-king-vs-ink-black-v2-sharp.webp",
         "alt": "Conceptual illustration comparing a golden mechanical keyboard switch with a black mechanical keyboard switch",
         "kind": "illustration"
       }
