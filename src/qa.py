@@ -85,7 +85,7 @@ def validate(root: Path = ROOT) -> list[str]:
                 if decoded == '/': path = dist/'index.html'
                 elif decoded.endswith('/'): path = path/'index.html'
                 if not path.is_file(): errors.append(f'{item}: missing asset {url}')
-            # A 200-pixel thumbnail upscaled to 760 pixels is not release quality.
+            # Reject thumbnails too small for high-DPI cards; verify source quality separately.
             for source in scan.images:
                 clean_source = unquote(urlparse(source).path)
                 if clean_source in checked_images:
@@ -95,7 +95,7 @@ def validate(root: Path = ROOT) -> list[str]:
                 if image_file.is_file():
                     try:
                         width, height = thumbnail_dimensions(image_file)
-                        if width < 760 or height < 380:
+                        if width < 1000 or height < 500:
                             errors.append(f'{item}: low-resolution image {source} ({width}x{height})')
                     except Exception:
                         errors.append(f'{item}: invalid or unreadable WebP image {source}')
