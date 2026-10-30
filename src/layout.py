@@ -37,7 +37,7 @@ def layout(title: str, description: str, path: str, body: str, mode: str,
 <script type="application/ld+json">{jsonld}</script>{extra_head}
 </head><body>
 <a class="skip-link" href="#main">Skip to main content</a>
-<div class="topline"><div class="container top-inner"><span>Clear specs. Useful context. No invented reviews.</span></div></div>
+<div class="topline"><div class="container top-inner"><span>Clear specs. Useful context. No invented reviews.</span><a href="/standards/">Our editorial standard <span aria-hidden="true">↗</span></a></div></div>
 <header class="site-header"><div class="container header-inner">
 <a class="brand" href="/" aria-label="TechTinkerer HQ home"><span class="brand-mark" aria-hidden="true">T<span class="mark-dot">.</span></span><span>TechTinkerer <em>HQ</em></span></a>
 <nav aria-label="Main navigation"><ul><li><a href="/guides/">All guides</a></li><li><a href="/standards/">How we verify</a></li><li><a href="/about/">About</a></li></ul></nav>
@@ -47,7 +47,7 @@ def layout(title: str, description: str, path: str, body: str, mode: str,
 <footer class="footer"><div class="container footer-grid">
 <div><a class="brand footer-brand" href="/" aria-label="TechTinkerer HQ home"><span class="brand-mark" aria-hidden="true">T<span class="mark-dot">.</span></span><span>TechTinkerer <em>HQ</em></span></a>
 <p>Making hardware specifications easier to understand—without pretending we tested what we didn't.</p></div>
-<div><h2>Explore</h2><a href="/guides/">Tech guides</a><a href="/about/">About the site</a></div>
+<div><h2>Explore</h2><a href="/guides/">Tech guides</a><a href="/standards/">Editorial standards</a><a href="/about/">About the site</a></div>
 <div><h2>Information</h2><a href="/privacy/">Privacy</a><a href="/disclosure/">Affiliate disclosure</a><a href="/sitemap.xml">Sitemap</a></div>
 </div><div class="container footer-bottom"><span>© {date.today().year} {BRAND}. Independent technology explanations.</span><span>Built as a lightweight static website.</span></div></footer>
 </body></html>'''

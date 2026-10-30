@@ -42,7 +42,7 @@ Open `http://localhost:8000/` to inspect. The built-in Python server does not ap
 
 ## Deployment workflow
 
-1. GitHub source is committed in [`cbw29512/techtinkerhq`](https://github.com/cbw29512/techtinkerhq), including the automated QA workflow.
+1. Create a dedicated repository in GitHub, e.g. `cbw29512/techtinkererhq`. Upload **the project contents**, not only `dist/`.
 2. In Netlify, add a new project importing this repository. Netlify should read `netlify.toml` and build a noindex preview by default.
 3. Test three guides, `/guides/` filters, internal links, 404, and the legacy 301 redirects on the Netlify staging domain.
 4. Only after browser, SEO, accessibility, and DNS/email checks pass, coordinate domain migration and explicitly authorize a production-indexable build.
@@ -54,5 +54,5 @@ Open `http://localhost:8000/` to inspect. The built-in Python server does not ap
 - Perform cross-browser tests and a real assistive-technology audit; automated checks alone do not certify ADA/WCAG conformance.
 - Verify whether SiteGround hosts email or only WordPress; preserve DNS/mail records.
 - Recover any actual original site uploads as a separate private archive, if present.
-- Connect the existing GitHub repository to a new Netlify staging project; verify the first Netlify build.
+- Connect a GitHub repository and a Netlify project; neither exists for this site as of packaging.
 - If an article bot is reintroduced, it must write reviewed, version-controlled article data, not publish directly from an LLM.
