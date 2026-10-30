@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "cadence": "weekly",
+  "items": [
+    {
+      "id": "proxmox-network-bridges-and-vlans",
+      "slug": "proxmox-bridges-vs-vlans-homelab",
+      "status": "review_needed",
+      "review": {
+        "verified_by": "",
+        "verified_at": "",
+        "sources_checked": false
+      },
+      "article": {
+        "id": "proxmox-bridges-and-vlans",
+        "slug": "proxmox-bridges-vs-vlans-homelab",
+        "status": "review_needed",
+        "category": "Networking",
+        "kind": "TECH GUIDE",
+        "reading_minutes": 5,
+        "featured": false,
+        "title": "Proxmox bridges and VLANs: what changes in your homelab",
+        "description": "Understand the difference between a Proxmox Linux bridge and VLAN segmentation before changing a homelab network.",
+        "dek": "A Linux bridge connects virtual machines; a VLAN divides the network into segments. They solve different problems.",
+        "sections": [
+          {
+            "heading": "A Linux bridge connects guests",
+            "paragraphs": [
+              "Proxmox VE uses Linux bridge interfaces to connect virtual machines to networks. The installer typically creates a bridge named vmbr0 and connects it to a physical network interface.",
+              "Think of the bridge as a software switch. Guests attached to the bridge can use the attached network, subject to the host and external network configuration."
+            ],
+            "bullets": [
+              "Identify which physical interface your bridge uses.",
+              "Verify the host's management address and gateway before changes.",
+              "Do not assume that adding a second bridge automatically creates a separate physical network."
+            ]
+          },
+          {
+            "heading": "A VLAN separates network segments",
+            "paragraphs": [
+              "VLANs distinguish separate Layer 2 broadcast domains using tags. Proxmox documents several ways to connect guests to VLANs, including VLAN-aware Linux bridges and per-VLAN bridge interfaces.",
+              "A VLAN-aware bridge can carry tagged guest traffic, but the connected switch and any upstream ports must also be configured to carry the intended VLANs."
+            ],
+            "bullets": [
+              "List the VLAN IDs you actually need.",
+              "Check the switch port configuration and tagging requirements.",
+              "Plan management access before editing a remote host's networking."
+            ]
+          },
+          {
+            "heading": "Practical homelab decision",
+            "paragraphs": [
+              "If all guests share one trusted LAN, a conventional Linux bridge may be sufficient. Use VLAN segmentation when you need distinct guest, management, or lab networks and can configure the full path consistently.",
+              "Proxmox supports web-interface changes and direct network configuration edits. Use a maintenance window and an out-of-band recovery plan for changes that could interrupt remote management."
+            ],
+            "bullets": [
+              "Bridge: how guests attach to a network.",
+              "VLAN: which isolated Layer 2 segment their traffic belongs to.",
+              "Check the Proxmox version and current documentation before applying configuration."
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "name": "Proxmox VE — Official network configuration documentation",
+            "url": "https://github.com/proxmox/pve-docs/blob/master/pve-network.adoc"
+          }
+        ]
+      }
+    }
+  ]
+}
