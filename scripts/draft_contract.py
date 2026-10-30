@@ -9,6 +9,13 @@ from urllib.parse import urlparse
 
 LOG = logging.getLogger(__name__)
 SLUG = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+# Trusted documentation roots. Never accept arbitrary model-supplied URLs.
+OFFICIAL_SOURCE_PATHS = (
+    ("github.com", "/proxmox/pve-docs/"),
+    ("docs.docker.com", "/engine/storage/"),
+    ("ubuntu.com", "/server/docs/how-to/backups/"),
+    ("docs.github.com", "/en/"),
+)
 MODEL_SCHEMA = {
     "type": "object", "additionalProperties": False,
     "properties": {
