@@ -45,7 +45,7 @@ def read_data(root: Path) -> tuple[dict, dict]:
             if not isinstance(visual, dict):
                 raise ValueError(f'Article {slug} needs an approved visual')
             image_path = visual.get('src', '')
-            image_name = image_path.removeprefix('/assets/thumbnails/')
+            image_name = image_path.removeprefix('/assets/thumbnails/') if isinstance(image_path, str) else ''
             if (not isinstance(image_path, str)
                 or not image_path.startswith('/assets/thumbnails/')
                 or not re.fullmatch(r'[a-z0-9-]+\.(?:webp|png|jpg|avif)', image_name)
