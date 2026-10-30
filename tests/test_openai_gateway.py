@@ -7,11 +7,19 @@ import os
 import unittest
 from unittest.mock import patch
 
-from scripts.draft_contract import next_topic
 from scripts.openai_gateway import request_draft
 from src.builder import ROOT
 
 LOG = logging.getLogger(__name__)
+
+
+def reference_topic() -> dict:
+    try:
+        # An already-queued topic is still valid for testing the API protocol.
+        return json.loads((ROOT / 'content/draft-topics.json').read_text(encoding='utf-8'))['topics'][0]
+    except Exception:
+        LOG.exception('Failed loading protocol fixture')
+        raise
 
 
 class FakeReply:
@@ -30,7 +38,7 @@ class FakeReply:
 
 class OpenAIGatewayContractTests(unittest.TestCase):
     def test_requires_explicit_enable_and_credentials(self):
-        topic = next_topic(ROOT)
+        topic = reference_topic()
         with patch.dict(os.environ, {"ENABLE_AI_DRAFTS": "false"}, clear=True):
             with self.assertRaisesRegex(RuntimeError, "disabled"):
                 request_draft(topic)
@@ -39,7 +47,7 @@ class OpenAIGatewayContractTests(unittest.TestCase):
                 request_draft(topic)
 
     def test_one_bounded_request_and_structured_output(self):
-        topic = next_topic(ROOT)
+        topic = reference_topic()
         recorded = []
         def fake_http(request, timeout):
             recorded.append((json.loads(request.data), request.headers, timeout))
@@ -61,7 +69,7 @@ class OpenAIGatewayContractTests(unittest.TestCase):
         self.assertLessEqual(timeout, 90)
 
     def test_incomplete_response_fails_closed(self):
-        topic = next_topic(ROOT)
+        topic = reference_topic()
         with patch.dict(os.environ, {"ENABLE_AI_DRAFTS": "true",
                                         "OPENAI_API_KEY": "unit-test-key",
                                         "OPENAI_DRAFT_MODEL": "test-model"}):
