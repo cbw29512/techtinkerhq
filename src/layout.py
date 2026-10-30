@@ -2,14 +2,33 @@
 from __future__ import annotations
 import html
 import json
+import hashlib
+import logging
+from functools import lru_cache
+from pathlib import Path
 from datetime import date
 
 BRAND = 'TechTinkerer HQ'
 DOMAIN = 'https://techtinkererhq.com'
+STYLESHEETS = ('base.css', 'layout.css', 'components.css', 'pages.css')
+ASSET_ROOT = Path(__file__).resolve().parents[1] / 'assets'
 
 
 def esc(value: str) -> str:
     return html.escape(str(value), quote=True)
+
+
+@lru_cache(maxsize=8)
+def stylesheet_url(name: str) -> str:
+    """Content-hash CSS paths so production never mixes fresh HTML with cached styling."""
+    try:
+        if name not in STYLESHEETS:
+            raise ValueError(f'Unrecognized stylesheet: {name}')
+        digest = hashlib.sha256((ASSET_ROOT / name).read_bytes()).hexdigest()[:12]
+        return f'/assets/{name}?v={digest}'
+    except Exception:
+        logging.getLogger(__name__).exception('Cannot fingerprint stylesheet %s', name)
+        raise
 
 
 def layout(title: str, description: str, path: str, body: str, mode: str,
@@ -20,6 +39,7 @@ def layout(title: str, description: str, path: str, body: str, mode: str,
         metadata = {'@context': 'https://schema.org', '@type': page_type,
                     'name': title, 'url': canonical, 'description': description}
         jsonld = json.dumps(metadata, ensure_ascii=False).replace('<', '\\u003c')
+        css_links = ''.join(f'<link rel="stylesheet" href="{stylesheet_url(name)}">' for name in STYLESHEETS)
         return f'''<!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -32,8 +52,7 @@ def layout(title: str, description: str, path: str, body: str, mode: str,
 <meta property="og:site_name" content="{BRAND}"><meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{esc(canonical)}">
 <meta property="og:image" content="{DOMAIN}/assets/social.svg"><meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="/assets/base.css"><link rel="stylesheet" href="/assets/layout.css">
-<link rel="stylesheet" href="/assets/components.css"><link rel="stylesheet" href="/assets/pages.css">
+{css_links}
 <script type="application/ld+json">{jsonld}</script>{extra_head}
 </head><body>
 <a class="skip-link" href="#main">Skip to main content</a>
