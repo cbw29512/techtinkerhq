@@ -14,11 +14,201 @@
         }
       ],
       "facts": [
-        {"id": "bridge", "text": "Proxmox VE uses Linux bridges for connecting guests to physical networks; bridge interfaces are often named vmbr0 or vmbr1."},
-        {"id": "staging", "text": "The Proxmox VE graphical interface stages networking changes in /etc/network/interfaces.new rather than changing /etc/network/interfaces immediately."},
-        {"id": "apply", "text": "With ifupdown2, the interface can apply staged network changes without restarting the entire host. This is not a guarantee that connectivity stays available."},
-        {"id": "risk", "text": "Incorrect changes to a host's network can make it unreachable. An out-of-band management plan or console access reduces recovery risk."},
-        {"id": "tool-warning", "text": "The Proxmox VE documentation warns against indiscriminate use of traditional ifup and ifdown commands because they may interrupt guest traffic."}
+        {
+          "id": "bridge",
+          "text": "Proxmox VE uses Linux bridges for connecting guests to physical networks; bridge interfaces are often named vmbr0 or vmbr1."
+        },
+        {
+          "id": "staging",
+          "text": "The Proxmox VE graphical interface stages networking changes in /etc/network/interfaces.new rather than changing /etc/network/interfaces immediately."
+        },
+        {
+          "id": "apply",
+          "text": "With ifupdown2, the interface can apply staged network changes without restarting the entire host. This is not a guarantee that connectivity stays available."
+        },
+        {
+          "id": "risk",
+          "text": "Incorrect changes to a host's network can make it unreachable. An out-of-band management plan or console access reduces recovery risk."
+        },
+        {
+          "id": "tool-warning",
+          "text": "The Proxmox VE documentation warns against indiscriminate use of traditional ifup and ifdown commands because they may interrupt guest traffic."
+        }
+      ]
+    },
+    {
+      "id": "docker-volumes-vs-bind-mounts",
+      "slug": "docker-volumes-vs-bind-mounts",
+      "category": "Containers",
+      "kind": "TECH GUIDE",
+      "focus": "Explain persistent Docker storage choices without destructive cleanup instructions",
+      "sources": [
+        {
+          "name": "Docker official storage documentation",
+          "url": "https://docs.docker.com/engine/storage/"
+        }
+      ],
+      "facts": [
+        {
+          "id": "volume",
+          "text": "Docker volumes are managed by the Docker daemon and persist outside a container's writable layer."
+        },
+        {
+          "id": "bind",
+          "text": "Bind mounts expose a host path inside a container."
+        },
+        {
+          "id": "portability",
+          "text": "Bind mounts depend on the host's filesystem layout and can be less portable."
+        },
+        {
+          "id": "writable",
+          "text": "Bind mounts are writable by default; read-only mounts can limit changes."
+        },
+        {
+          "id": "risk",
+          "text": "Removing or pruning volumes can destroy persistent application data."
+        }
+      ]
+    },
+    {
+      "id": "docker-volume-backup-fundamentals",
+      "slug": "docker-volume-backup-and-restore-fundamentals",
+      "category": "Backups",
+      "kind": "TECH GUIDE",
+      "focus": "Explain how to plan, verify, and safely restore Docker volume backups",
+      "sources": [
+        {
+          "name": "Docker official volumes documentation",
+          "url": "https://docs.docker.com/engine/storage/volumes/"
+        }
+      ],
+      "facts": [
+        {
+          "id": "lifecycle",
+          "text": "Docker volumes exist independently of the lifecycle of an individual container."
+        },
+        {
+          "id": "backup",
+          "text": "Docker documentation provides examples for backing up and restoring volume contents."
+        },
+        {
+          "id": "consistency",
+          "text": "Application-level consistency matters when planning backups of actively written data."
+        },
+        {
+          "id": "restore",
+          "text": "Restores should be tested in an isolated environment before replacing production data."
+        },
+        {
+          "id": "cleanup",
+          "text": "Deleting unused volumes may permanently remove application data."
+        }
+      ]
+    },
+    {
+      "id": "ubuntu-server-backup-plan",
+      "slug": "ubuntu-server-backup-plan",
+      "category": "Backups",
+      "kind": "TECH GUIDE",
+      "focus": "Create a decision guide for Ubuntu Server backups and restore drills",
+      "sources": [
+        {
+          "name": "Ubuntu official backup documentation",
+          "url": "https://ubuntu.com/server/docs/how-to/backups/"
+        }
+      ],
+      "facts": [
+        {
+          "id": "scope",
+          "text": "A backup plan should identify what data must be backed up."
+        },
+        {
+          "id": "cadence",
+          "text": "A backup plan should determine how often backups are performed."
+        },
+        {
+          "id": "destination",
+          "text": "Backup plans should specify where copies are stored; off-site copies help with disaster recovery."
+        },
+        {
+          "id": "restore",
+          "text": "A backup plan should document how data is restored."
+        },
+        {
+          "id": "redundancy",
+          "text": "Multiple backup methods can improve resilience against data loss."
+        }
+      ]
+    },
+    {
+      "id": "github-actions-least-privilege",
+      "slug": "github-actions-least-privilege-token-permissions",
+      "category": "Security",
+      "kind": "TECH GUIDE",
+      "focus": "Explain how to reduce GitHub Actions token permissions without breaking CI",
+      "sources": [
+        {
+          "name": "GitHub official workflow hardening guide",
+          "url": "https://docs.github.com/en/code-security/tutorials/secure-your-organization/protect-against-threats"
+        }
+      ],
+      "facts": [
+        {
+          "id": "permissions",
+          "text": "GitHub recommends explicitly declaring minimum necessary GITHUB_TOKEN workflow permissions."
+        },
+        {
+          "id": "secret-risk",
+          "text": "Workflows may have access to repository secrets or deployment credentials."
+        },
+        {
+          "id": "pinning",
+          "text": "Pinning third-party actions to full commit SHAs mitigates mutable tag risks."
+        },
+        {
+          "id": "policy",
+          "text": "Organizations can restrict allowed actions through policy controls."
+        },
+        {
+          "id": "review",
+          "text": "Changes to permissions should be tested against the workflow's required operations."
+        }
+      ]
+    },
+    {
+      "id": "github-actions-secrets-basics",
+      "slug": "github-actions-secrets-management-basics",
+      "category": "Security",
+      "kind": "TECH GUIDE",
+      "focus": "Describe practical secrets handling for GitHub Actions with no sample real credentials",
+      "sources": [
+        {
+          "name": "GitHub official Actions secrets guide",
+          "url": "https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets"
+        }
+      ],
+      "facts": [
+        {
+          "id": "location",
+          "text": "Repository and organization secrets can be configured through GitHub's Actions secrets settings."
+        },
+        {
+          "id": "scope",
+          "text": "Organization secrets can use repository access policies."
+        },
+        {
+          "id": "credentials",
+          "text": "Secrets should not be included in committed workflow files or logs."
+        },
+        {
+          "id": "least-privilege",
+          "text": "Credentials used by workflows should be scoped to the minimum required permissions."
+        },
+        {
+          "id": "redaction",
+          "text": "GitHub warns that automatic redaction of transformed secret values is not guaranteed."
+        }
       ]
     }
   ]
