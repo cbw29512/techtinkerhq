@@ -20,6 +20,7 @@ def read_data(root: Path) -> tuple[dict, dict]:
         if doc.get('schema_version') != 2 or archive.get('schema_version') != 1:
             raise ValueError('Unsupported article or legacy mapping schema')
         seen = set()
+        seen_visuals = set()
         for item in doc.get('articles', []):
             slug = item.get('slug', '')
             if not _SLUG.fullmatch(slug) or slug in seen:
@@ -38,6 +39,24 @@ def read_data(root: Path) -> tuple[dict, dict]:
                 url = urlparse(source.get('url', ''))
                 if url.scheme != 'https' or url.hostname not in _ALLOWED:
                     raise ValueError(f'Article {slug} has unapproved evidence domain: {url.hostname}')
+            # Visuals are as important as text: require a unique self-hosted
+            # article-specific visual before any guide can be published.
+            visual = item.get('visual')
+            if not isinstance(visual, dict):
+                raise ValueError(f'Article {slug} needs an approved visual')
+            image_path = visual.get('src', '')
+            image_name = image_path.removeprefix('/assets/thumbnails/')
+            if (not isinstance(image_path, str)
+                or not image_path.startswith('/assets/thumbnails/')
+                or not re.fullmatch(r'[a-z0-9-]+\\.(?:webp|png|jpg|avif)', image_name)
+                or image_path in seen_visuals):
+                raise ValueError(f'Article {slug} has an unsafe or reused image')
+            seen_visuals.add(image_path)
+            alt = visual.get('alt')
+            if not isinstance(alt, str) or not 40 <= len(alt.strip()) <= 180:
+                raise ValueError(f'Article {slug} needs descriptive image alt text')
+            if visual.get('kind') not in ('illustration', 'verified-photo'):
+                raise ValueError(f'Article {slug} needs a defined image type')
             raw = json.dumps(item)
             if _BAD.search(raw):
                 raise ValueError(f'Article {slug} contains placeholder text')
