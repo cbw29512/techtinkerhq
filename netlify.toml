@@ -1,0 +1,7 @@
+# Build preview by default. Release requires a verified production cutover.
+[build]
+  command = "python3 -m unittest discover -s tests -v && python3 -m src.builder --mode preview && python3 -m src.qa"
+  publish = "dist"
+
+[build.environment]
+  PYTHON_VERSION = "3.12"

@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "source_record_count": 15,
+  "note": "Original unreviewed content is preserved in the user-supplied WordPress export, not shipped to the public site. Redirect only after review.",
+  "paths": [
+    {
+      "source": "/sample-page/",
+      "target": "/about/",
+      "wordpress_id": "2",
+      "old_title": "Sample Page",
+      "action": "301 redirect after cutover"
+    },
+    {
+      "source": "/kw_3001/",
+      "target": "/guides/10gbe-switch-homelab-checklist/",
+      "wordpress_id": "6",
+      "old_title": "kw_3001",
+      "action": "301 redirect after cutover"
+    },
+    {
+      "source": "/kw_3002/",
+      "target": "/guides/gateron-oil-king-vs-ink-black-v2/",
+      "wordpress_id": "7",
+      "old_title": "kw_3002",
+      "action": "301 redirect after cutover"
+    },
+    {
+      "source": "/kw_3001-2/",
+      "target": "/guides/10gbe-switch-homelab-checklist/",
+      "wordpress_id": "8",
+      "old_title": "kw_3001",
+      "action": "301 redirect after cutover"
+    },
+    {
+      "source": "/kw_3002-2/",
+      "target": "/guides/gateron-oil-king-vs-ink-black-v2/",
+      "wordpress_id": "9",
+      "old_title": "kw_3002",
+      "action": "301 redirect after cutover"
+    },
+    {
+      "source": "/kw_3001-3/",
+      "target": "/guides/10gbe-switch-homelab-checklist/",
+      "wordpress_id": "10",
+      "old_title": "kw_3001",
+      "action": "301 redirect after cutover"
+    },
+    {
+      "source": "/kw_3002-3/",
+      "target": "/guides/gateron-oil-king-vs-ink-black-v2/",
+      "wordpress_id": "11",
+      "old_title": "kw_3002",
+      "action": "301 redirect after cutover"
+    },
+    {
+      "source": "/kw_3001-4/",
+      "target": "/guides/10gbe-switch-homelab-checklist/",
+      "wordpress_id": "12",
+      "old_title": "kw_3001",
+      "action": "301 redirect after cutover"
+    },
+    {
+      "source": "/kw_3002-4/",
+      "target": "/guides/gateron-oil-king-vs-ink-black-v2/",
+      "wordpress_id": "13",
+      "old_title": "kw_3002",
+      "action": "301 redirect after cutover"
+    },
+    {
+      "source": "/kw-3001/",
+      "target": "/guides/10gbe-switch-homelab-checklist/",
+      "wordpress_id": "14",
+      "old_title": "Kw 3001",
+      "action": "301 redirect after cutover"
+    },
+    {
+      "source": "/kw-3002/",
+      "target": "/guides/gateron-oil-king-vs-ink-black-v2/",
+      "wordpress_id": "15",
+      "old_title": "Kw 3002",
+      "action": "301 redirect after cutover"
+    },
+    {
+      "source": "/kw-3001-2/",
+      "target": "/guides/10gbe-switch-homelab-checklist/",
+      "wordpress_id": "16",
+      "old_title": "Kw 3001",
+      "action": "301 redirect after cutover"
+    },
+    {
+      "source": "/netgear-prosafe-gs116/",
+      "target": "/guides/10gbe-switch-homelab-checklist/",
+      "wordpress_id": "17",
+      "old_title": "Netgear Prosafe Gs116",
+      "action": "301 redirect after cutover"
+    },
+    {
+      "source": "/tp-link-tl-sg108pe/",
+      "target": "/guides/tp-link-tl-sg108pe-specifications-explained/",
+      "wordpress_id": "18",
+      "old_title": "Tp-Link Tl-Sg108Pe",
+      "action": "301 redirect after cutover"
+    },
+    {
+      "source": "/tp-link-tl-sg105/",
+      "target": "/guides/10gbe-switch-homelab-checklist/",
+      "wordpress_id": "19",
+      "old_title": "Tp Link Tl Sg105",
+      "action": "301 redirect after cutover"
+    }
+  ]
+}

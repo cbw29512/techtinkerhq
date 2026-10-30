@@ -1,0 +1,25 @@
+name: Verify Tech Tinkerer HQ Staging
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Unit tests and fail-closed preview build
+        run: |
+          python3 -m unittest discover -s tests -v
+          python3 -m src.builder --mode preview
+          python3 -m src.qa
+      - name: Verify staging remains noindex
+        run: |
+          grep -q 'Disallow: /' dist/robots.txt
+          grep -q 'noindex' dist/index.html

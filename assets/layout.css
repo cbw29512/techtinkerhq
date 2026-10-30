@@ -1,0 +1,15 @@
+.topline{background:#0a1521;color:#b7c9d2;font-size:12px;border-bottom:1px solid #304052}
+.top-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:36px}
+.top-inner a{color:#d5f7bd;text-decoration:none}.top-inner a:hover{text-decoration:underline}
+.site-header{background:#fff;position:relative;z-index:10;border-bottom:1px solid #e3e8ee}
+.header-inner{min-height:80px;display:flex;align-items:center;justify-content:space-between;gap:25px}
+.brand{display:inline-flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink);font-size:19px;font-weight:860;line-height:1.15;letter-spacing:-.04em;white-space:nowrap}
+.brand em{font-style:normal;color:#378c69}.brand-mark{display:grid;place-items:center;background:#112338;color:#c8fa65;border-radius:10px;width:43px;height:43px;font-weight:900;font-size:25px;letter-spacing:-.12em}.mark-dot{color:#fff}
+.site-header nav ul{list-style:none;display:flex;flex-wrap:wrap;gap:26px;margin:0;padding:0}.site-header nav a{font-size:14px;color:#283d50;text-decoration:none;font-weight:750}.site-header nav a:hover{text-decoration:underline;text-underline-offset:6px}
+.preview-banner{background:#ffe8af;text-align:center;color:#423419;font-size:13px;padding:8px;font-weight:800}
+.footer{margin-top:98px;background:#101c2a;color:#f1f6f5;padding-top:65px}.footer-grid{display:grid;grid-template-columns:2.5fr 1fr 1fr;gap:55px;padding-bottom:50px}
+.footer-grid .brand{color:#fff}.footer-grid .brand em{color:#c8fa65}.footer-grid p{margin:18px 0 0;font-size:14px;color:#b0bdc8;max-width:370px}
+.footer-grid h2{font-size:14px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#ecf5e9;margin:0 0 18px}
+.footer-grid>div:not(:first-child){display:flex;flex-direction:column;gap:10px}.footer-grid a:not(.brand){font-size:14px;color:#bfd0da;text-decoration:none}.footer-grid a:not(.brand):hover{text-decoration:underline;color:#fff}
+.footer-bottom{display:flex;justify-content:space-between;gap:18px;border-top:1px solid #2b3948;padding:20px 0 28px;color:#a2b2bf;font-size:12px}
+@media(max-width:700px){.top-inner span{display:none}.top-inner{justify-content:center}.header-inner{flex-direction:column;align-items:start;padding:15px 0;gap:14px}.site-header nav ul{gap:18px}.footer-grid{grid-template-columns:1fr 1fr;gap:30px}.footer-grid>div:first-child{grid-column:span 2}.footer-bottom{flex-direction:column}.footer{margin-top:60px}}
