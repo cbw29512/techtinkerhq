@@ -48,7 +48,7 @@ def read_data(root: Path) -> tuple[dict, dict]:
             image_name = image_path.removeprefix('/assets/thumbnails/')
             if (not isinstance(image_path, str)
                 or not image_path.startswith('/assets/thumbnails/')
-                or not re.fullmatch(r'[a-z0-9-]+\\.(?:webp|png|jpg|avif)', image_name)
+                or not re.fullmatch(r'[a-z0-9-]+\.(?:webp|png|jpg|avif)', image_name)
                 or image_path in seen_visuals):
                 raise ValueError(f'Article {slug} has an unsafe or reused image')
             seen_visuals.add(image_path)
