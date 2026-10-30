@@ -14,9 +14,9 @@
 ## Not completed / do not claim
 
 - GitHub repository `cbw29512/techtinkerhq` is created and its source has been verified on `main`. GitHub Actions QA passed for the initial import.
-- No Netlify site has been created or deployed for TechTinkerer HQ. Connect GitHub through Netlify's **Import an existing project** flow.
+- Netlify staging project `techtinkerhq` exists, site ID `86eda16d-176d-41f1-9c96-d75fad3ee7cd`. Deployment `6ae4fd496484ccf5b50e28b9` is `ready` for the tested GitHub commit `3e29e08cec558456a57be27a18f1d6dfea7214b8`. Netlify reports 10 generated pages, 15 redirects, and 2 header rules.
 - No DNS update or SiteGround cancellation has occurred.
-- External source links have been reviewed as evidence, but live network load tests after deployment are still required.
+- Manufacturer/project source links opened successfully on October 30, 2026. External live HTTP checks of every guide route and all 301 redirects remain pending because the direct crawler could not fetch this staging URL.
 - No full ADA/WCAG certification or live automated SEO audit has been performed.
 - No automated article-publishing bot is configured; its future release gate is specified in README.
 - No affiliate links have been published; merchant/affiliate destinations require verification and explicit approval.
