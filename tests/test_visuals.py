@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import shutil
 import tempfile
 import unittest
@@ -47,7 +48,7 @@ class ArticleVisualTests(unittest.TestCase):
             build(ROOT, mode='preview')
             html = (ROOT / 'dist' / 'index.html').read_text(encoding='utf-8')
             for css in ('base.css', 'layout.css', 'components.css', 'pages.css'):
-                self.assertRegex(html, rf'/assets/{css.replace(".", r"\\.")}\\?v=[a-f0-9]{{12}}')
+                self.assertRegex(html, r'/assets/' + re.escape(css) + r'\?v=[a-f0-9]{12}')
             components = (ROOT / 'assets' / 'components.css').read_text(encoding='utf-8')
             self.assertIn('.card-content h3 a{color:#0b1727', components)
         except Exception:
