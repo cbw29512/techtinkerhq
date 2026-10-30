@@ -51,6 +51,12 @@ class AIDraftingContractTests(unittest.TestCase):
                 target = self.root / filename
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(ROOT / filename, target)
+            # Isolate the test topic so real AI draft merges cannot exhaust the fixture.
+            topic_path = self.root / "content/draft-topics.json"
+            topics = json.loads(topic_path.read_text(encoding="utf-8"))
+            topics["topics"][0]["id"] = "synthetic-ai-draft-fixture"
+            topics["topics"][0]["slug"] = "synthetic-ai-draft-fixture"
+            topic_path.write_text(json.dumps(topics), encoding="utf-8")
         except Exception:
             LOG.exception("AI test fixture setup failed")
             raise
@@ -74,6 +80,7 @@ class AIDraftingContractTests(unittest.TestCase):
             self.assertTrue(generate(self.root, model_call=forbidden, apply=True)["disabled"])
 
     def test_generated_draft_cannot_publish_without_human_review(self):
+        baseline, _ = read_data(self.root)
         calls = []
         def mock_model(topic):
             calls.append(topic["slug"])
@@ -87,7 +94,7 @@ class AIDraftingContractTests(unittest.TestCase):
             self.assertFalse(queue["items"][-1]["review"]["sources_checked"])
             self.assertEqual(queue["items"][-1]["article"]["status"], "review_needed")
             public, _ = read_data(self.root)
-            self.assertEqual(len(public["articles"]), 3)
+            self.assertEqual(len(public["articles"]), len(baseline["articles"]))
             self.assertFalse(generate(self.root, model_call=mock_model, apply=True)["changed"])
             self.assertEqual(len(calls), 1)
 
