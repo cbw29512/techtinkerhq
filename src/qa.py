@@ -8,6 +8,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 from .builder import ROOT
+from .analytics import MEASUREMENT_ID
 
 LOG = logging.getLogger(__name__)
 
@@ -77,6 +78,10 @@ def validate(root: Path = ROOT) -> list[str]:
                 errors.append(f'{item}: missing/duplicate metadata or h1')
             if report['mode'] == 'preview' and 'noindex' not in scan.robots:
                 errors.append(f'{item}: preview page missing noindex')
+            if report['mode'] == 'preview' and 'analytics-consent.js' in content:
+                errors.append(f'{item}: preview must not enable analytics')
+            if report['mode'] == 'production' and content.count('data-ga4-id="'+MEASUREMENT_ID+'"') != 1:
+                errors.append(f'{item}: production GA4 opt-in loader absent or duplicated')
             for url in scan.links:
                 decoded = unquote(urlparse(url).path)
                 if '\x00' in decoded or '/../' in decoded:
@@ -111,7 +116,9 @@ def validate(root: Path = ROOT) -> list[str]:
             errors.append('Preview robots did not block crawlers')
         if report['mode']=='production' and 'Disallow: /' in robots:
             errors.append('Production robots blocks crawlers')
-        for file in ('assets/favicon.svg','assets/social.svg','assets/filters.js','_headers','sitemap.xml'):
+        for file in ('assets/favicon.svg','assets/social.svg','assets/filters.js',
+                     'assets/analytics-consent.js','assets/analytics-consent.css',
+                     '_headers','sitemap.xml'):
             if not (dist/file).is_file(): errors.append(f'Missing deploy asset: {file}')
         if any(dist.rglob('*.xml')) and (dist/'source').exists():
             errors.append('Raw WordPress export was copied into production')
