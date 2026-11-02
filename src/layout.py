@@ -7,6 +7,7 @@ import logging
 from functools import lru_cache
 from pathlib import Path
 from datetime import date
+from .analytics import analytics_head, privacy_button, consent_banner
 
 BRAND = 'TechTinkerer HQ'
 DOMAIN = 'https://techtinkererhq.com'
@@ -53,6 +54,7 @@ def layout(title: str, description: str, path: str, body: str, mode: str,
 <meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{esc(canonical)}">
 <meta property="og:image" content="{DOMAIN}/assets/social.svg"><meta name="twitter:card" content="summary_large_image">
 {css_links}
+{analytics_head(mode)}
 <script type="application/ld+json">{jsonld}</script>{extra_head}
 </head><body>
 <a class="skip-link" href="#main">Skip to main content</a>
@@ -68,7 +70,8 @@ def layout(title: str, description: str, path: str, body: str, mode: str,
 <p>Making hardware specifications easier to understand—without pretending we tested what we didn't.</p></div>
 <div><h2>Explore</h2><a href="/guides/">Tech guides</a><a href="/about/">About the site</a></div>
 <div><h2>Information</h2><a href="/privacy/">Privacy</a><a href="/disclosure/">Affiliate disclosure</a><a href="/sitemap.xml">Sitemap</a></div>
-</div><div class="container footer-bottom"><span>© {date.today().year} {BRAND}. Independent technology explanations.</span><span>Built as a lightweight static website.</span></div></footer>
+</div><div class="container footer-bottom"><span>© {date.today().year} {BRAND}. Independent technology explanations.</span><span>Built as a lightweight static website.</span>{privacy_button(mode)}</div></footer>
+{consent_banner(mode)}
 </body></html>'''
     except Exception:
         import logging
