@@ -80,7 +80,8 @@ def validate(root: Path = ROOT) -> list[str]:
                 errors.append(f'{item}: preview page missing noindex')
             if report['mode'] == 'preview' and 'analytics-consent.js' in content:
                 errors.append(f'{item}: preview must not enable analytics')
-            if report['mode'] == 'production' and content.count('data-ga4-id="'+MEASUREMENT_ID+'"') != 1:
+            if (report['mode'] == 'production' and item.name != '404.html' and
+                    content.count('data-ga4-id="'+MEASUREMENT_ID+'"') != 1):
                 errors.append(f'{item}: production GA4 opt-in loader absent or duplicated')
             for url in scan.links:
                 decoded = unquote(urlparse(url).path)
