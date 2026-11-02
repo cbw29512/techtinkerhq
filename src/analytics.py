@@ -38,8 +38,8 @@ def consent_banner(mode: str) -> str:
         return '''<section id="analytics-consent" class="analytics-consent"
 aria-label="Optional analytics" tabindex="-1" hidden>
 <div class="analytics-consent-inner">
-<p><strong>Optional analytics.</strong> Allow anonymous-aggregate traffic
-reporting so we can improve this site. No Google Analytics tag loads
+<p><strong>Optional analytics.</strong> Allow optional traffic
+measurement so we can improve this site. No Google Analytics tag loads
 unless you choose Allow. <a href="/privacy/">Privacy details</a>.</p>
 <div class="analytics-consent-actions">
 <button id="analytics-accept" type="button">Allow analytics</button>
